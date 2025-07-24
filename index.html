@@ -76,6 +76,1334 @@
     <button onclick="setChallengeText()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-colors duration-300 ease-in-out mb-6">
       課題文を設定
     </button>
+    <p id="originalTextDisplay" class="p-3 md:p-4 bg-white rounded-lg shadow-sm text-lg md:text-xl mb-6">I want to go to the library.</p>
+
+    <div class="flex flex-wrap gap-3 mb-8">
+      <button onclick="startRecording()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-colors duration-300 ease-in-out">
+        🎙️ 録音開始
+      </button>
+      <button onclick="stopRecording()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-colors duration-300 ease-in-out">
+        ⏹️ 録音停止 & 採点
+      </button>
+      <button onclick="downloadCSV()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-colors duration-300 ease-in-out">
+        ⬇️ 採点結果をCSVで保存
+      </button>
+    </div>
+
+    <h3 class="text-xl md:text-2xl font-medium mb-2">認識された音声</h3>
+    <p id="recognizedText" class="p-3 md:p-4 bg-white rounded-lg shadow-sm text-lg md:text-xl mb-6">ここに認識結果が表示されます</p>
+
+    <h3 class="text-xl md:text-2xl font-medium mb-2">スコア</h3>
+    <!-- スコアゲージ表示エリア -->
+    <div id="scoreGauges" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <!-- Pronunciation Gauge -->
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h4 class="font-medium text-lg mb-2">Pronunciation（発音）</h4>
+        <div class="w-full bg-gray-200 rounded-full h-6 relative">
+          <div id="gauge-pronunciation" class="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+          <span id="score-pronunciation" class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white mix-blend-difference">0/5</span>
+        </div>
+      </div>
+      <!-- Fluency Gauge -->
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h4 class="font-medium text-lg mb-2">Fluency（流暢さ）</h4>
+        <div class="w-full bg-gray-200 rounded-full h-6 relative">
+          <div id="gauge-fluency" class="bg-green-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+          <span id="score-fluency" class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white mix-blend-difference">0/5</span>
+        </div>
+      </div>
+      <!-- Rhythm Gauge -->
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h4 class="font-medium text-lg mb-2">Rhythm（リズム）</h4>
+        <div class="w-full bg-gray-200 rounded-full h-6 relative">
+          <div id="gauge-rhythm" class="bg-yellow-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+          <span id="score-rhythm" class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white mix-blend-difference">0/5</span>
+        </div>
+      </div>
+      <!-- Word Accuracy Gauge -->
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h4 class="font-medium text-lg mb-2">Word Accuracy（単語の正確さ）</h4>
+        <div class="w-full bg-gray-200 rounded-full h-6 relative">
+          <div id="gauge-wordAccuracy" class="bg-red-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+          <span id="score-wordAccuracy" class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white mix-blend-difference">0/5</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="text-xl md:text-2xl font-medium mb-2">アドバイス</h3>
+    <p id="conciseAdvice" class="p-3 md:p-4 bg-white rounded-lg shadow-sm text-lg md:text-xl mb-6 min-h-[4rem]">ここに簡潔なアドバイスが表示されます</p>
+
+    <h3 class="text-xl md:text-2xl font-medium mb-2">詳細なフィードバック</h3>
+    <p id="geminiResult" class="p-3 md:p-4 bg-white rounded-lg shadow-sm text-lg md:text-xl mb-6 min-h-[4rem]">ここにGeminiからの詳細なフィードバックが表示されます</p>
+
+    <h3 class="text-xl md:text-2xl font-medium mb-2">比較結果（色付き）</h3>
+    <p id="diffOutput" class="p-3 md:p-4 bg-white rounded-lg shadow-sm text-lg md:text-xl mb-6 min-h-[4rem]">ここに一致・不一致が表示されます</p>
+  </div>
+
+  <!-- FACTBOOKページ -->
+  <div id="factbookPage" class="page-container">
+    <button onclick="showPage('homepage')" class="mb-6 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out">
+      ← ホームに戻る
+    </button>
+    <h1 class="text-3xl md:text-4xl font-semibold mb-6">FACTBOOK</h1>
+
+    <!-- Chapter Selection Buttons (Dynamically generated) -->
+    <div id="factbookChapterSelection" class="flex flex-wrap gap-4 mb-8 justify-center">
+      <!-- Chapter buttons will be inserted here by JavaScript -->
+    </div>
+
+    <!-- Chapter Content Containers (Dynamically generated) -->
+    <div id="factbookContent" class="bg-white rounded-lg shadow-sm p-6 text-lg">
+      <!-- Chapter content will be inserted here by JavaScript -->
+    </div>
+  </div>
+
+  <script>
+    let recognition; // 音声認識オブジェクト
+    let spoken = ""; // 認識された音声テキスト
+    // originalTextDisplayから初期値を設定
+    let original = document.getElementById("originalTextDisplay").textContent; 
+    const scoreHistory = []; // 採点履歴を保存する配列
+
+    // FACTBOOKのコンテンツデータ
+    const factbookContentData = {
+        "chapter1": {
+            title: "第1章 文型（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "My computer froze.", ja: "私のコンピューターがフリーズした。" },
+                        { en: "My father swims really well.", ja: "私の父は泳ぐのが本当に上手だ。" },
+                        { en: "My cousin is an engineer.", ja: "私のいとこはエンジニアです。" },
+                        { en: "My father is shy.", ja: "父は内気です。" },
+                        { en: "You look happy.", ja: "楽しそうですね。" },
+                        { en: "He read an interesting book.", ja: "彼は興味深い本を読んだ。" },
+                        { en: "Ellie has beautiful eyes.", ja: "エリーは美しい目をしている。" },
+                    ]
+                }
+            ]
+        },
+        "chapter2": {
+            title: "第2章 文型（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Can you give me your phone number?", ja: "あなたの電話番号を（教えて）くれませんか。" },
+                        { en: "My parents bought me a nice sweater.", ja: "両親は私にすてきなセーターを買ってくれた。" },
+                        { en: "She gave this book to me.", ja: "彼女はこの本を，私にくれました。" },
+                        { en: "We call him Jimmy.", ja: "私たちは彼をジミーと呼ぶ。" },
+                        { en: "I'll make you happy.", ja: "君を幸せにしてあげるよ。" },
+                        { en: "The door opened.", ja: "ドアが開いた。" },
+                        { en: "He opened the door.", ja: "彼はドアを開けた。" },
+                        { en: "The sun rises in the east.", ja: "太陽は東から上がる。" },
+                        { en: "He raised his hand.", ja: "彼は手を上げた。" },
+                        { en: "We discussed （×about） the matter.", ja: "私たちはその問題について話し合った。" },
+                        { en: "I complained to （×complained） him.", ja: "私は彼に文句を言った。" },
+                    ]
+                },
+            ]
+        },
+        "plus_bunkei": { // Renamed for valid ID
+            title: "Plus 文型",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Study hard.", ja: "一生懸命勉強しなさい。" },
+                        { en: "Be quiet.", ja: "静かにしなさい。" },
+                        { en: "Don't talk during the test.", ja: "テスト中に話をするな。" },
+                        { en: "Don't be nervous. You'll be fine.", ja: "弱気になるな。だいじょうぶだから。" },
+                        { en: "Let's order pizza tonight.", ja: "今晩，ピザ頼もうよ。" },
+                        { en: "Mommy, there is a dog at the door.", ja: "ママ，犬がドアのところにいるよ。" },
+                        { en: "What a nice camera you have!", ja: "君はなんてすてきなカメラを持っているのだろう。" },
+                        { en: "How fast he runs!", ja: "彼はなんて速く走るのだろう。" },
+                    ]
+                }
+            ]
+        },
+        "chapter3": {
+            title: "第3章 時を表す表現（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "I am a student.", ja: "私は学生です。" },
+                        { en: "I know three languages.", ja: "私は３つの言語を知っています。" },
+                        { en: "The earth goes around the sun.", ja: "地球は太陽の周りを回っている。" },
+                        { en: "My dad takes the first train every day.", ja: "私の父は毎日，始発電車に乗ります。" },
+                        { en: "It started raining.", ja: "雨が降り始めた。" },
+                        { en: "My father played golf when he was younger.", ja: "私の父は今より若い頃，ゴルフをしていた。" },
+                        { en: "I am planning a trip to London.", ja: "私はロンドンへの旅行を計画しているところです。" },
+                        { en: "They were chatting with Lucy at that time.", ja: "そのとき，彼らはルーシーとおしゃべりしていました。" },
+                    ]
+                }
+            ]
+        },
+        "chapter4": {
+            title: "第4章 時を表す表現（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Take an umbrella because it will rain later.", ja: "傘をもっていきなさい。あとで雨になるから。" },
+                        { en: "OK, I'll phone her right away.", ja: "わかった。すぐに彼女に電話を入れるよ。" },
+                        { en: "It's going to rain soon.", ja: "もうすぐ雨になるよ。" },
+                        { en: "Are you going to have a party?", ja: "あなたはパーティーをするつもりですか。" },
+                        { en: "I'm seeing a movie with Keiko on Thursday.", ja: "私は木曜日にケイコと映画を見る予定です。" },
+                        { en: "My birthday is next Tuesday.", ja: "私の誕生日は来週の火曜日です。" },
+                        { en: "What time does this train arrive at Tokyo Station?", ja: "この電車は何時に東京駅に到着しますか。" },
+                        { en: "I'll be playing tennis at three.", ja: "私は３時にはテニスをすることになっています。" },
+                    ]
+                }
+            ]
+        },
+        "chapter5": {
+            title: "第5章 完了形（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "I have finished it.", ja: "私はそれを終えてしまった。" },
+                        { en: "He has finished it.", ja: "彼はそれを終えてしまった。" },
+                        { en: "Have you finished it?", ja: "あなたはそれを終えてしまいましたか？" },
+                        { en: "I have not finished it.", ja: "私はそれを終えていない。" },
+                        { en: "Look! It's stopped raining.", ja: "見て！　雨がやんだわ。" },
+                        { en: "I've eaten wild deer.", ja: "私は野生の鹿を食べたことがある。" },
+                        { en: "We've been to Universal Studios in Los Angeles.", ja: "私たちはロサンゼルスのユニバーサルスタジオに行ったことがあります。" },
+                        { en: "We've been teammates for three years.", ja: "私たちは３年間ずっとチームメートです。" },
+                        { en: "I've lived in Tokyo since 2014.", ja: "私は2014年から東京に住んでいます。" },
+                        { en: "Where's Mom? ─ She's gone to the hair salon.", ja: "お母さんはどこ？ ―― 美容室に行ったよ。" },
+                        { en: "Don't worry. I've cleaned your room.", ja: "だいじょうぶ。あなたの部屋を掃除しておいたわよ。" },
+                    ]
+                },
+            ]
+        },
+        "chapter6": {
+            title: "第6章 完了形（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "The game had already started when I got to the stadium.", ja: "その試合は私がスタジアムに着いたときには，すでに始まっていました。" },
+                        { en: "I had never used a smartphone before I bought one this year.", ja: "今年買う前は，私はスマートフォンを使ったことがありませんでした。" },
+                        { en: "They had known each other for seven years before they got married.", ja: "彼らは結婚する前に７年間，知り合いだったんですよ。" },
+                        { en: "I knew the ending of the movie because I had read the book.", ja: "私は本を読んでいたから，映画のエンディングを知っていました。" },
+                        { en: "I will have finished my homework by ten.", ja: "私は10 時までには宿題を終わらせていますよ。" },
+                        { en: "I've been cleaning my room since this morning.", ja: "私は今朝からずっと自分の部屋を掃除し続けているんです。" },
+                    ]
+                }
+            ]
+        },
+        "chapter7": {
+            title: "第7章 助動詞（１）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "You must finish this report on time.", ja: "あなたたちはこのレポートを時間どおりに仕上げなければいけません。" },
+                        { en: "You mustn't do that! You'll break the window.", ja: "それをやっちゃだめだ！ 窓を割ってしまうよ。" },
+                        { en: "The injury isn't serious? You must be relieved!", ja: "ケガは大したことないの？ ホッとしたでしょう！" },
+                        { en: "May I come in?", ja: "入ってよろしいでしょうか。" },
+                        { en: "We may go to Spain this summer.", ja: "私たちは今年の夏，スペインに行くかもしれません。" },
+                        { en: "It will rain tomorrow.", ja: "明日は雨になるでしょう。" },
+                        { en: "Accidents will happen.", ja: "事故は起こるものだ。" },
+                        { en: "My dad would often take us fishing.", ja: "父はよく私たちを釣りに連れていってくれたものだった。" },
+                        { en: "I'll give you a hand.", ja: "私が手伝ってあげますよ。" },
+                    ]
+                }
+            ]
+        },
+        "chapter8": {
+            title: "第8章 助動詞（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Kenji can run 100 meters in 11 seconds.", ja: "ケンジは100メートルを11秒で走ることができます。" },
+                        { en: "You can use my eraser.", ja: "私の消しゴムを使ってもいいよ。" },
+                        { en: "Tokyo can be very cold in April.", ja: "東京は４月にとても寒くなることがある。" },
+                        { en: "That can't be true.", ja: "それは本当のはずがない。" },
+                        { en: "You should be more careful with your money.", ja: "あなたはお金にもっと気をつけるべきです。" },
+                        { en: "I should be able to get to the restaurant by seven.", ja: "私はレストランには７時までには着けるはずですよ。" },
+                        { en: "Shall I help you?", ja: "お手伝いしましょうか。" },
+                        { en: "Shall we dance?", ja: "ダンスしましょうよ。" },
+                    ]
+                }
+            ]
+        },
+        "chapter9": {
+            title: "第9章 助動詞（3）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "You'd better call an ambulance!", ja: "救急車を呼んだほうがいいよ！" },
+                        { en: "I used to live in Gunma.", ja: "私は以前，群馬に住んでいました。" },
+                        { en: "This would be my eighth trip to Kyoto.", ja: "これで８回目の京都旅行になるのだろうな。" },
+                        { en: "Can[Will] you give me a hand?", ja: "手伝ってくれる？" },
+                        { en: "Could[Would] you open the window?", ja: "窓を開けていただけますか。" },
+                        { en: "Something may[might] have happened to her.", ja: "彼女に何かあったのかもしれない。" },
+                        { en: "They must have lost their way.", ja: "彼らは道に迷ったにちがいない。" },
+                        { en: "I could have left my smartphone at home.", ja: "私は家にスマートフォンを忘れたかもしれない。" },
+                        { en: "He can't[couldn't] have said that.", ja: "彼がそんなことを言ったわけがない。" },
+                        { en: "My mom should have arrived home by now.", ja: "お母さんは今頃，家に着いているはずですよ。" },
+                        { en: "I should have studied harder.", ja: "私はもっと一生懸命勉強すべきだった。" },
+                    ]
+                },
+            ]
+        },
+        "chapter10": {
+            title: "第10章 受動態（１）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "John was attacked by the dog.", ja: "ジョンはその犬に襲われた。" },
+                        { en: "English is spoken all over the world.", ja: "英語は世界中で話されている。" },
+                        { en: "We have been invited to Hiro's New Year's party.", ja: "私たちはヒロの新年会に呼ばれています。" },
+                        { en: "A new cafeteria is being built at our school.", ja: "私たちの学校では新しいカフェテリアが建てられているところです。" },
+                        { en: "Our school sports day will be held next Sunday.", ja: "私たちの学校の運動会は来週の日曜日に開催されます。" },
+                        { en: "Is French spoken in Canada?", ja: "カナダでフランス語は話されていますか。" },
+                        { en: "When was Botchan written by Natsume Soseki?", ja: "いつ『坊ちゃん』は夏目漱石によって書かれましたか。" },
+                        { en: "Some questions weren't answered by the teacher.", ja: "いくつかの質問は先生に答えてもらえなかった。" },
+                        { en: "I was born and raised in London.", ja: "私はロンドンで生まれ育ちました。" },
+                    ]
+                }
+            ]
+        },
+        "chapter11": {
+            title: "第11章 受動態（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "My brother was injured in a skiing accident.", ja: "私の兄はスキーの事故でけがをした。" },
+                        { en: "We were surprised at the news.", ja: "私たちはそのニュースを聞いて驚いた。" },
+                        { en: "Our science club was given an award.", ja: "私たちの科学クラブが賞を与えられた。" },
+                        { en: "An award was given to our science club.", ja: "賞が私たちの科学クラブに与えられた。" },
+                        { en: "Christopher is called Chris by his friends.", ja: "クリストファーは友人にクリスと呼ばれている。" },
+                        { en: "I was brought up in a big family.", ja: "私は大家族で育てられました。" },
+                        { en: "Jericho is said to be the oldest city in the world.", ja: "ジェリコは世界で最も古い都市だと言われている。" },
+                        { en: "It is said (that) Jericho is the oldest city in the world.", ja: "ジェリコは世界で最も古い都市だと言われている。" },
+                    ]
+                },
+            ]
+        },
+        "chapter12": {
+            title: "第12章 不定詞（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "To make new friends is not so easy.", ja: "新しい友だちを作ることはそれほど簡単ではありません。" },
+                        { en: "I like to play video games with my friends.", ja: "私は友だちとテレビゲームをするのが好きです。" },
+                        { en: "To see is to believe.", ja: "見ることは信じることである。（＝百聞は一見に如かず）" },
+                        { en: "It's not so easy to make new friends.", ja: "新しい友だちを作ることはそれほど簡単ではありません。" },
+                        { en: "I think it strange to put pineapple on a pizza.", ja: "私はピザにパイナップルを載せるのは変だと思います。" },
+                        { en: "I have many teachers to help me.", ja: "私には手助けをしてくれる多くの先生がいる。" },
+                        { en: "I have a lot of homework to do.", ja: "私にはやるべき宿題がたくさんある。" },
+                        { en: "I have two hamsters to look after.", ja: "私には世話をすべき２匹のハムスターがいる。" },
+                        { en: "I don't have time to relax.", ja: "私にはリラックスできる時間がありません。" },
+                    ]
+                }
+            ]
+        },
+        "chapter13": {
+            title: "第13章 不定詞（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Many Japanese students go to Australia to practice English.", ja: "多くの日本人学生は，英語を練習するためにオーストラリアに行きます。" },
+                        { en: "My parents were delighted to hear about my excellent grades.", ja: "両親は私の良い成績を聞いて大喜びした。" },
+                        { en: "He grew up to be a famous singer.", ja: "彼は成長して有名な歌手になった。" },
+                        { en: "She must be rich to buy such an expensive car.", ja: "そんなに高い車を買うなんて，彼女はお金持ちにちがいない。" },
+                        { en: "Try not to think too much.", ja: "考えすぎないようにしなさい。" },
+                        { en: "I saw Mary cross the street.", ja: "私はメアリーが通りを渡るのを見た。" },
+                        { en: "The movie made me cry.", ja: "その映画を見て私は泣いてしまった。" },
+                    ]
+                }
+            ]
+        },
+        "chapter14": {
+            title: "第14章 不定詞（3）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "My parents always tell me to study harder.", ja: "両親はいつも，私にもっと一生懸命勉強をしなさいと言います。" },
+                        { en: "I want her to stay with us.", ja: "私は彼女に私たちと一緒にいてほしい。" },
+                        { en: "You are to be here by 7 a.m.", ja: "午前7時までにここに集合すること。" },
+                        { en: "The president is to visit Japan next week.", ja: "大統領は来週，訪日の予定です。" },
+                        { en: "He came to realize the importance of teamwork.", ja: "彼はチームワークの重要性を理解するようになった。" },
+                        { en: "She seems[appears] to be happy in her new school.", ja: "彼女は新しい学校で楽しそうだ。" },
+                        { en: "Lucy seems to have been sick.", ja: "ルーシーは体調が悪かったみたいですね。" },
+                        { en: "I'm sorry to have missed your birthday party.", ja: "あなたの誕生日パーティーに行けなくてすみません。" },
+                    ]
+                }
+            ]
+        },
+        "plus_futeishi": { // Renamed for valid ID
+            title: "Plus 不定詞",
+            sections: [
+                {
+                    sentences: [
+                        { en: "I don't know what to say.", ja: "なんて言っていいのか私はわかりません。" },
+                        { en: "Tell me when to start.", ja: "いつスタートすればいいのか私に教えてね。" },
+                        { en: "I know where to find them.", ja: "私はどこで彼らが見つかるのか知っています。" },
+                        { en: "She is sure to win.", ja: "彼女は必ず勝つ。" },
+                        { en: "He is easy to please.", ja: "彼を喜ばせるのは簡単です。" },
+                        { en: "OK. I'm ready to go.", ja: "オーケー。出発の準備ができました。" },
+                        { en: "I have enough money to buy a new smartphone.", ja: "私は新しいスマートフォンを買うのに十分なお金をもっています。" },
+                        { en: "Are you old enough to drive a car?", ja: "あなたは運転できる年齢ですか。" },
+                        { en: "I was too sad to speak.", ja: "私は悲しすぎて口がきけなかった。" },
+                        { en: "To tell the truth, I didn't study for the test.", ja: "実を言うと（本当のことを言うと），私はテストのための勉強をしませんでした。" },
+                        { en: "To be honest, I don't like pizza.", ja: "正直に言って，私はピザが好きではありません。" },
+                    ]
+                },
+            ]
+        },
+        "chapter15": {
+            title: "第15章 動名詞（１）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Making new friends is not so easy.", ja: "新しい友だちを作ることはそれほど簡単ではありません。" },
+                        { en: "I like playing video games with my friends.", ja: "私は友だちとテレビゲームをするのが好きです。" },
+                        { en: "My hobby is collecting stamps.", ja: "私の趣味は切手を集めることです。" },
+                        { en: "Ken is good at playing baseball.", ja: "ケンは野球をするのが得意です。" },
+                        { en: "My mother doesn't like me[my] playing video games.", ja: "母は私がテレビゲームをするのが好きではない。" },
+                        { en: "I hope to see you again.", ja: "またお目にかかりたく存じます。" },
+                        { en: "Just stop calling me.", ja: "とにかく私に電話するのをやめてよ。" },
+                        { en: "Remember to lock the door when you go out.", ja: "外出するときはドアに鍵をかけるのを忘れないように。" },
+                        { en: "I remember meeting her at a party.", ja: "私は彼女とパーティーで会ったことを覚えています。" },
+                    ]
+                },
+            ]
+        },
+        "chapter16": {
+            title: "第16章 動名詞（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Not wearing a helmet on a bike is dangerous.", ja: "ヘルメットをつけないで自転車に乗るのは危険です。" },
+                        { en: "I'm proud of having been a student at this school.", ja: "私はこの学校の生徒だったことを誇りに思っている。" },
+                        { en: "Nobody likes being scolded.", ja: "誰も怒られるのは好きではない。" },
+                        { en: "I'm looking forward to seeinng you next month.", ja: "来月あなたと会うのを楽しみにしています。" },
+                        { en: "My mom is used to getting up early.", ja: "私の母は早起きすることに慣れている。" },
+                        { en: "I can't help laughing at his jokes.", ja: "私は彼の冗談に笑わずにはいられない。" },
+                        { en: "It's no use regretting your decision.", ja: "自分の決断を後悔してもむだだ。" },
+                        { en: "There is no telling who will win the gold medal.", ja: "誰が金メダルをとるかは断言できない。" },
+                        { en: "I don't feel like watching a movie tonight.", ja: "私は今晩映画を見る気にならない。" },
+                        { en: "How about having Thai food for lunch?", ja: "昼食にタイ料理を食べるのはどう？" },
+                        { en: "Her new book is worth reading.", ja: "彼女の新刊は読む価値があるよ。" },
+                        { en: "A bad cold prevented her from going to the concert.", ja: "ひどい風邪のせいで彼女はコンサートに行けなかった。" },
+                    ]
+                }
+            ]
+        },
+        "chapter17": {
+            title: "第17章 分詞（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "The man eating popcorn is my friend Bill.", ja: "ポップコーンを食べている男性は，友人のビルです。" },
+                        { en: "The things stolen were not so valuable.", ja: "盗まれたものはそれほど高価ではなかった。" },
+                        { en: "This is the picture painted by my father.", ja: "これは父が描いた絵です。" },
+                        { en: "The baby kept crying.", ja: "赤ちゃんは泣き続けた。" },
+                        { en: "My racket got broken during the match.", ja: "私のラケットが試合中に壊れた。" },
+                        { en: "Sorry to keep you waiting.", ja: "あなたを待たせてごめんね。" },
+                        { en: "Keep the door locked.", ja: "ドアに鍵をかけておきなさい。" },
+                        { en: "I saw Mary crossing the street.", ja: "私はメアリーが通りを渡っているのを見た。" },
+                        { en: "I saw a boy scolded by his father.", ja: "私は少年が父親に叱られているのを見た。" },
+                        { en: "I had my hair cut yesterday.", ja: "昨日髪をカットしてもらったよ。" },
+                        { en: "It's difficult to make myself understood in English.", ja: "英語で意思を伝えるのはむずかしい。" },
+                    ]
+                },
+            ]
+        },
+        "chapter18": {
+            title: "第18章 分詞（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "I spent all morning cleaning up my room.", ja: "私は部屋の片づけをして午前中ずっと過ごした。" },
+                        { en: "I was busy doing my homework.", ja: "私は宿題をするのに忙しかった。" },
+                        { en: "A bird came flying into the classroom.", ja: "一羽の鳥が教室の中に飛んできた。" },
+                        { en: "My daughter came home disappointed.", ja: "私の娘はがっかりして家に帰ってきた。" },
+                        { en: "She accepted the prize, smiling happily.", ja: "彼女はうれしそうにほほ笑みながら，賞品を受け取った。" },
+                        { en: "She left a note on the door, finding nobody home.", ja: "誰も家にいなかったので，彼女はドアに置き手紙をした。" },
+                        { en: "The captain scored a goal, putting the team into the finals.", ja: "キャプテンがゴールを決めて，チームを決勝に進めた。" },
+                        { en: "Feeling really hungry, I ate half a dozen donuts.", ja: "お腹が本当にすいて，私ドーナツを６個も食べちゃったよ。" },
+                        { en: "Pleased by her test result, she jumped for joy!", ja: "テストの結果がうれしくて，彼女はとび上がって喜んだ。" },
+                    ]
+                }
+            ]
+        },
+        "plus_bunshi": { // Renamed for valid ID
+            title: "Plus 分詞",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Not wanting to be late, she took a taxi.", ja: "遅刻したくなかったので，彼女はタクシーに乗った。" },
+                        { en: "Having visited New York before, she knew the good restaurants.", ja: "以前ニューヨークを訪れたことがあったので，彼女はおいしいレストランを知っていました。" },
+                        { en: "Today being my sister's birthday, I bought her some chocolates.", ja: "今日は妹の誕生日なので，私は彼女にチョコレートを買ってあげました。" },
+                        { en: "I listened to the music with my heart beating.", ja: "私は心を高鳴らせながらその曲を聞いた。" },
+                        { en: "She prayed for peace with her eyes closed.", ja: "彼女は目を閉じて平和を祈った。" },
+                        { en: "Judging from the sky, it's going to snow tonight.", ja: "空模様から判断すると，今夜は雪が降るね。" },
+                        { en: "Compared to Tokyo, San Francisco is a small city.", ja: "東京に比べると，サンフランシスコは小さな都市です。" },
+                    ]
+                },
+            ]
+        },
+        "chapter19": {
+            title: "第19章 比較（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Tom is as tall as Mary.", ja: "トムはメアリーと同じくらいの背の高さだ。" },
+                        { en: "She speaks as naturally as a native speaker.", ja: "彼女はネイティブ・スピーカーと同じくらい自然に話す。" },
+                        { en: "I'm not as tall as him.", ja: "私は彼ほど背が高くない。" },
+                        { en: "Our new cafeteria is twice as large as the old one.", ja: "私たちの新しいカフェテリアは以前のものの２倍の広さだ。" },
+                        { en: "I have as many CDs as Ken.", ja: "私はケンと同じくらいの数のCDをもっている。" },
+                        { en: "Follow me. This way is quicker.", ja: "ついておいで。こっちの道のほうが早いよ。" },
+                        { en: "Please drive more slowly.", ja: "もっとゆっくり運転してください。" },
+                        { en: "I became taller than him.", ja: "僕は彼よりも背が高くなった。" },
+                        { en: "Fruit is much cheaper in my country than in Japan.", ja: "果物は日本よりも私の国のほうがはるかに安い。" },
+                        { en: "Sue is three years younger than me.", ja: "スーは私よりも３歳若い。" },
+                    ]
+                }
+            ]
+        },
+        "chapter20": {
+            title: "第20章 比較（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Oh, that's the best idea.", ja: "ああ，それは最高のアイデアですね。" },
+                        { en: "Who speaks English the most fluently in your family?", ja: "家族で誰が一番英語をすらすら話しますか。" },
+                        { en: "Tom is the tallest in his class.", ja: "トムはクラスでもっとも背が高い。" },
+                        { en: "Tom is the tallest of the three.", ja: "トムは３人のうち［全体で］もっとも背が高い。" },
+                        { en: "This is by far the best restaurant in town.", ja: "これは断然，街で最高のレストランです。" },
+                        { en: "K2 is the second highest mountain in the world.", ja: "K2は世界で２番目に高い山だ。" },
+                        { en: "Boston is one of the oldest cities in the U.S.", ja: "ボストンはアメリカでもっとも古い都市の１つです。" },
+                        { en: "This is the most moving film I've ever seen.", ja: "これはこれまで見た中でもっとも感動的な映画です。" },
+                        { en: "No (other) mountain in Japan is as[so] high as Mt. Fuji.", ja: "日本の（ほかの）どの山も富士山ほど高くない。" },
+                        { en: "No (other) mountain in Japan is higher than Mt. Fuji.", ja: "日本の（ほかの）どの山も富士山より高くない。" },
+                        { en: "Mt. Fuji is higher than any other mountain in Japan.", ja: "富士山は日本のほかのどの山よりも高い。" },
+                    ]
+                },
+            ]
+        },
+        "plus_hikaku": { // Renamed for valid ID
+            title: "Plus 比較",
+            sections: [
+                {
+                    sentences: [
+                        { en: "She visits her grandmother as often as three times a week.", ja: "彼女はおばあさんのところに週に３回も行っています。" },
+                        { en: "OK, keep calm. I'll get there as fast as I can[possible].", ja: "いいかい，落ち着いて。できるだけ早くそこに行くから。" },
+                        { en: "Photography is not so much a job as a hobby for me.", ja: "写真撮影は私にとって仕事というよりはむしろ趣味です。" },
+                        { en: "He is the taller of the two.", ja: "彼は２人のうちで背の高いほうだ。" },
+                        { en: "This product is superior to that one.", ja: "この製品はあの製品よりも優れている。" },
+                        { en: "Your English is getting better and better.", ja: "君の英語，どんどんよくなっているね。" },
+                        { en: "The younger you are, the easier it is to learn.", ja: "若ければ若いほど，学ぶのは易しい。" },
+                        { en: "This dictionary is less useful than that one.", ja: "この辞書はあの辞書ほど役に立たない。" },
+                        { en: "The earth is no more than a little planet.", ja: "地球は小さな惑星にすぎない。" },
+                        { en: "A house in that area costs no less than $500,000.", ja: "あの地域の家は50万ドルもする。" },
+                        { en: "This is no more a Rolex than my toy watch is.", ja: "これは僕のおもちゃの時計と同じで，ロレックスなんかじゃないよ。" },
+                        { en: "I'm no less confident than before, just because I didn't win.", ja: "試合に勝てなかったというだけで以前よりも自信を失ったわけじゃない。" },
+                    ]
+                },
+            ]
+        },
+        "chapter21": {
+            title: "第21章 関係詞（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "I have a friend who wants to be an astronaut.", ja: "宇宙飛行士になりたい友だちがいます。" },
+                        { en: "I like stories which have happy endings.", ja: "私はハッピーエンドの物語が好きです。" },
+                        { en: "That is the man who I met on the train to Kyoto.", ja: "あの人が私が京都に行く電車で会った男性です。" },
+                        { en: "The dress which Ann bought is so cute!", ja: "アンが買ったドレスはすごくかわいい！" },
+                        { en: "I have a friend whose father is a lawyer.", ja: "私にはお父さんが弁護士をしている友だちがいます。" },
+                    ]
+                }
+            ]
+        },
+        "chapter22": {
+            title: "第22章 関係詞（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "This is the hospital in which I was born.", ja: "これが私が生まれた病院です。" },
+                        { en: "The woman that lives next door is an artist.", ja: "隣に住んでいる女性は芸術家です。" },
+                        { en: "The car that I want to get is eco-friendly.", ja: "私が買いたい車は環境に配慮したものです。" },
+                        { en: "The human is the only animal that uses fire.", ja: "人間は火を使う唯一の動物だ。" },
+                        { en: "The car I want to get is eco-friendly.", ja: "私が買いたい車は環境に配慮したものです。" },
+                        { en: "The man you were talking to is my cousin.", ja: "あなたが話していたのは私のいとこです。" },
+                    ]
+                }
+            ]
+        },
+        "chapter23": {
+            title: "第23章 関係詞（3）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Yokohama is the city where I was born.", ja: "横浜は私が生まれた都市だ。" },
+                        { en: "Christmas is the day when the whole family gets together.", ja: "クリスマスは家族全員が集まる日です。" },
+                        { en: "I don't know the reason why he got angry.", ja: "私は彼が腹を立てた理由がわかりません。" },
+                        { en: "This is how I solved the problem.", ja: "これが私がその問題を解決したやり方です。" },
+                        { en: "She has a son, who is a college student.", ja: "彼女には息子が1人いて，大学生なのです。" },
+                        { en: "We stayed at the Grand Hotel, which some friends recommended to us.", ja: "私たちはグランドホテルに泊まりました。何人かの友だちが私たちに勧めてくれたところです。" },
+                        { en: "I'm going to spend two weeks in New York, where my brother lives.", ja: "私はニューヨークに2週間滞在する予定です。そこには兄が住んでいます。" },
+                        { en: "She is hardworking, which he is not.", ja: "彼女は努力家だが，彼はそうではない。" },
+                    ]
+                }
+            ]
+        },
+        "chapter24": {
+            title: "第24章 パッケージ表現としての節（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "What he told me was a lie.", ja: "彼が私に言ったことはうそだった。" },
+                        { en: "This story is what is called an urban legend.", ja: "この話はいわゆる都市伝説だ。" },
+                        { en: "My hometown today is different from what it was 15 years ago.", ja: "今では私の故郷は15年前とは違っている。" },
+                        { en: "My bike got a flat tire, and what was worse, it started to rain.", ja: "自転車がパンクして，さらに悪いことに雨が降りだした。" },
+                        { en: "It's the best dish on the menu, and what is more, it's cheap.", ja: "それはメニューの中で一番の料理で，その上安い。" },
+                        { en: "You can eat whatever you like.", ja: "何でも好きなものを食べていいよ。" },
+                        { en: "Please choose whichever you need.", ja: "どれでも必要なものを選んでください。" },
+                        { en: "I'll take you wherever you want to go.", ja: "あなたが行きたいところならどこにでも連れていくよ。" },
+                        { en: "I'll be here for you whenever you need me.", ja: "あなたが私を必要なときはいつでもそばにいてあげるよ。" },
+                    ]
+                }
+            ]
+        },
+        "chapter25": {
+            title: "第25章 パッケージ表現としての節（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Whoever I play against, I must win the next match.", ja: "対戦する相手が誰でも，私は次の試合に勝たなければなりません。" },
+                        { en: "Whatever I say, he won't agree with me.", ja: "私が何を言おうとも，彼は私に賛成しないでしょう。" },
+                        { en: "However hard I tried, I couldn't think of a good idea.", ja: "どんなに一生懸命頑張っても，よい考えを思いつきませんでした。" },
+                        { en: "Whether I buy the racket will depend on the price.", ja: "そのラケットを買うかどうかは値段によります。" },
+                        { en: "He asked me if I wanted to have lunch with him.", ja: "彼は私に昼食を一緒に食べたいかどうかを尋ねた。" },
+                    ]
+                }
+            ]
+        },
+        "chapter26": {
+            title: "第26章 仮定法（1）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "If you practiced more, you would be a better player.", ja: "〈実際はあまり練習しないが〉もっと練習したら，あなたは今よりよい選手になれるのになあ。" },
+                        { en: "If I were you, I wouldn't do such things.", ja: "もし私があなただったら，そんなことはしないだろう。" },
+                        { en: "If you had asked me, I would have helped you.", ja: "もし私に頼んでくれたら，あなたを助けてあげたのに。" },
+                        { en: "If you had followed my advice, you wouldn't be in trouble now.", ja: "もしあなたが私の助言に従っていたら，今困ったことにはなっていないだろうに。" },
+                        { en: "I wish I had a brother.", ja: "〈実際はいないが〉弟がいたらなあ。" },
+                        { en: "I wish I were rich.", ja: "〈実際はそうではないが〉お金持ちだったらなあ。" },
+                        { en: "I have a stomachache. I wish I hadn't eaten so much chocolate!", ja: "おなかが痛い。〈実際には食べたのだが〉あんなにたくさんチョコレートを食べなければよかった！" },
+                    ]
+                },
+            ]
+        },
+        "chapter27": {
+            title: "第27章 仮定法（2）",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Without my parents' support, I couldn't have graduated from college.", ja: "両親の援助がなかったら，私は大学を卒業することはできなかったろうな。" },
+                        { en: "But for your help, I would have given up a long time ago.", ja: "君の助けがなかったら，ずいぶん前にあきらめていただろう。" },
+                        { en: "Something strange is happening. Otherwise, he would not act like this.", ja: "何か妙なことが起こっている。そうでなければ彼がこんなふうに振る舞うわけはない。" },
+                        { en: "Oh, if only Bob were here!", ja: "ああ，ボブがここにいたらなあ。" },
+                        { en: "My brother talks as if he knew everything.", ja: "兄は何でも知っているかのように話す。" },
+                        { en: "If it weren't for sports, my life would be pretty dull.", ja: "スポーツがなかったら，私の生活はかなり退屈なものになっていることだろう。" },
+                        { en: "It's time we said good-bye.", ja: "お別れの時間です。" },
+                        { en: "If you were to visit Japan in early April, you'd see the beautiful cherry blossoms.", ja: "もし4月の初めに日本に来るなら，美しい桜を見ることができるでしょうね。" },
+                        { en: "If you should arrive at the theater before me, just wait at the entrance.", ja: "もし映画館に私より先に着くようなら，入口で待っていてね。" },
+                    ]
+                }
+            ]
+        },
+        "option1": { // Renamed for valid ID
+            title: "Option① 否定",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Who ate my pudding? ─ Not me!", ja: "私のプリンを食べたのは誰？ ─ 僕じゃないよ！" },
+                        { en: "This apartment is not for rent.", ja: "このアパートは賃貸用ではありません。" },
+                        { en: "I don't really like your new car.", ja: "君の新しい車，それほど好きではないなあ。" },
+                        { en: "I really don't like your new car.", ja: "君の新しい車，まったく好きではない。" },
+                        { en: "It won't be long before Dad leaves the hospital.", ja: "まもなく父は退院するだろう。" },
+                        { en: "She is not only talented but confident.", ja: "彼女は才能があるだけではなく自信にあふれている。" },
+                        { en: "My teachers don't put me down but give me self-confidence.", ja: "先生たちは私を縮こまらせず自信を与えてくれる。" },
+                        { en: "My uncle never comes to our house without bringing a present.", ja: "おじは我が家に来るときは必ずプレゼントを持ってくる。" },
+                        { en: "She would be the last person to say something like that.", ja: "彼女はそんなことは絶対に言わない人だ。" },
+                        { en: "Can't you find a job?", ja: "あなたは仕事を見つけられないの？" },
+                        { en: "You speak English, don't you?", ja: "君は英語を話すよね？" },
+                    ]
+                },
+            ]
+        },
+        "option2": { // Renamed for valid ID
+            title: "Option② さまざまな表現",
+            sections: [
+                {
+                    sentences: [
+                        { en: "The news made us excited.", ja: "私たちはそのニュースを聞いてワクワクした。" },
+                        { en: "The sign says you can't swim in the lake.", ja: "標識には湖で泳いではいけないとあります。" },
+                        { en: "This road takes you to the stadium.", ja: "この道を行けばスタジアムに着きます。" },
+                        { en: "Do help yourself to tea or coffee.", ja: "どうぞご自由に紅茶やコーヒーをお召し上がりくださいね。" },
+                        { en: "What on earth is that?", ja: "いったい全体あれは何？" },
+                        { en: "She doesn't eat any meat at all.", ja: "彼女は肉をまったく食べない。" },
+                        { en: "I've heard that excuse again and again.", ja: "その言い訳は何度も聞いた。" },
+                        { en: "It was my little sister that stepped on the cat yesterday.", ja: "昨日ネコふんじゃったのは、私の妹なんだよ。" },
+                        { en: "I love banana pancakes. ─ So do I!", ja: "私はバナナパンケーキが大好きです。―私もだよ！" },
+                        { en: "Never have I tasted such delicious sushi!", ja: "こんなおいしいお寿司を私は食べたことがない!" },
+                        { en: "We heard a rumor that she was going to quit her job.", ja: "彼女が仕事を辞めるといううわさを私たちは聞いた。" },
+                    ]
+                }
+            ]
+        },
+        "option3": { // Renamed for valid ID
+            title: "Option③ 話法",
+            sections: [
+                {
+                    sentences: [
+                        { en: "He said, “It's rainy.”", ja: "彼は「雨が降っている」と言った。" },
+                        { en: "He said it was rainy.", ja: "彼は，雨が降っていると言った。" },
+                        { en: "He said, “It will be rainy.”", ja: "彼は「雨になるだろう」と言った。" },
+                        { en: "He said it would be rainy.", ja: "彼は，雨になるだろうと言った。" },
+                        { en: "He said, “It was rainy.”", ja: "彼は「雨だった」と言った。" },
+                        { en: "He said it had been rainy.", ja: "彼は，雨だったと言った。" },
+                        { en: "My dad said,“I'll lend you the money.”", ja: "父は「君にお金を貸してあげるよ」と言った。" },
+                        { en: "My dad said he would lend me the money.", ja: "父は，私にお金を貸してくれると言った。" },
+                        { en: "My brother called from Paris and said,“I'm leaving here tomorrow.”", ja: "兄はパリから電話をかけてきて「ここを明日出発するよ」って言いました。" },
+                        { en: "My brother called from Paris and said he was leaving there the next day.", ja: "兄はパリから電話をかけてきて，そこを次の日出発すると言いました。" },
+                        { en: "Ken said to me, “I am ready.”", ja: "ケンは私に「準備ができたよ」と言った。" },
+                        { en: "Ken told me he was ready.", ja: "ケンは私に，準備ができたと言った。" },
+                        { en: "She said to me,“Do you like the movie?”", ja: "彼女は私に「その映画は好きですか」と言った。" },
+                        { en: "She asked me if[whether] I liked the movie.", ja: "彼女は私に，その映画が好きかどうか尋ねた。" },
+                        { en: "She said to me,“Where do you live?”", ja: "彼女は私に「どこに住んでいるのですか」と言った。" },
+                        { en: "She asked me where I lived.", ja: "彼女は私に，どこに住んでいるのか尋ねた。" },
+                        { en: "My mom said to me,“Be back by ten.”", ja: "母は私に「10時までに帰りなさい」と言った。" },
+                        { en: "My mom told me to be back by ten.", ja: "母は私に，10時までに帰るように言った。" },
+                    ]
+                },
+            ]
+        },
+        "option4": { // Renamed for valid ID
+            title: "Option④ 限定詞",
+            sections: [
+                {
+                    sentences: [
+                        { en: "There are some dogs in his garden.", ja: "彼の家の庭に数匹の犬がいる。" },
+                        { en: "Choose any card.", ja: "どのカードでもいいから選んでください。" },
+                        { en: "Do you have any questions?", ja: "何か質問はありますか。" },
+                        { en: "All the spectators were delighted.", ja: "観客たちはみんな大喜びした。" },
+                        { en: "Every participant will receive a prize.", ja: "すべての参加者に賞品が出ます。" },
+                        { en: "She had a teacup in each hand.", ja: "彼女はそれぞれの手にティーカップを持っていた。" },
+                        { en: "You can have both dresses.", ja: "両方のドレスを買ってあげます。" },
+                        { en: "You can have either dress.", ja: "どちらかのドレスを買ってあげます。" },
+                        { en: "You can have neither dress.", ja: "どちらのドレスも買えませんよ。" },
+                        { en: "What do you think about this bag?", ja: "このバッグ，どう思う？" },
+                        { en: "Whose is that red sports car over there?", ja: "向こうにあるあの赤いスポーツカーは誰のものですか。" },
+                    ]
+                },
+            ]
+        },
+        "option5": { // Renamed for valid ID
+            title: "Option⑤ 代名詞",
+            sections: [
+                {
+                    sentences: [
+                        { en: "We are happy.", ja: "私たちは幸せだ。" },
+                        { en: "His arms are bigger than my legs!", ja: "彼の腕は私の脚より太い！" },
+                        { en: "I know him.", ja: "私は彼のことを知っている。" },
+                        { en: "Is this your tennis racket? ─ No, mine is on the bench.", ja: "これはあなたのテニスラケットですか。─ いえ，私のはベンチの上にあります。" },
+                        { en: "Helen cut herself chopping carrots.", ja: "ヘレンは，ニンジンを切りながら指を切ってしまった。" },
+                        { en: "How did you like the movie? ─ I liked it a lot.", ja: "その映画どうだった？─ とても気に入ったよ。" },
+                        { en: "It's dark here.", ja: "ここ暗いね。" },
+                        { en: "It's sunny today.", ja: "今日はいい天気だ。" },
+                        { en: "It's Wednesday today.", ja: "今日は水曜日だ。" },
+                        { en: "What time is it? ─ It's five o'clock now.", ja: "今何時ですか。 ─ ５時です。" },
+                        { en: "It's five kilometers from here to the station.", ja: "ここから駅までは５キロあります。" },
+                        { en: "My laptop is broken, so I need to buy a new one.", ja: "私のノートパソコンは壊れているから，新しいのを買う必要がある。" },
+                    ]
+                },
+            ]
+        },
+        "option6": { // Renamed for valid ID
+            title: "Option⑥ 前置詞",
+            sections: [
+                {
+                    sentences: [
+                        { en: "My favorite band is playing at the Budokan next week.", ja: "私の大好きなバンドが来週，武道館で演奏することになっている。" },
+                        { en: "There's ice cream in the fridge.", ja: "アイスクリームが冷蔵庫の中にある。" },
+                        { en: "Put your homework on my desk.", ja: "宿題は，私の机の上に置いてください。" },
+                        { en: "I weigh about 58 kilos.", ja: "私の体重は約58キロです。" },
+                        { en: "He gave a talk about cats.", ja: "彼は猫についての話をした。" },
+                        { en: "I know a great bookshop by my school.", ja: "私の学校の近くにすごくいい書店を知っているよ。" },
+                        { en: "I go to school by bicycle.", ja: "私は自転車で学校に通っています。" },
+                        { en: "I need to finish this report by 11:00.", ja: "私は11時までにこのレポートを終えなければならない。" },
+                        { en: "These chocolates are for you.", ja: "これらのチョコはあなたにです。" },
+                        { en: "This is a special knife for making sashimi.", ja: "これは刺身用の特別な包丁なんですよ。" },
+                        { en: "I jumped for joy when I passed the entrance exam.", ja: "私は入試に合格したとき，喜びで飛び上がった。" },
+                        { en: "Are you for or against the plan?", ja: "あなたはこの計画に賛成ですか，それとも反対ですか。" },
+                        { en: "Our flight leaves from Terminal 2.", ja: "私たちの航空便はターミナル２から出る。" },
+                        { en: "the last chapter of the book", ja: "その本の最終章" },
+                        { en: "Come and have lunch with us.", ja: "こっちに来て私たちとランチを食べようよ。" },
+                        { en: "I ate the fish with chopsticks.", ja: "私はその魚をはしで食べた。" },
+                    ]
+                },
+            ]
+        },
+        "option7": { // Renamed for valid ID
+            title: "Option⑦ 接続詞",
+            sections: [
+                {
+                    sentences: [
+                        { en: "Jane and Nancy are best friends.", ja: "ジェーンとナンシーは親友だ。" },
+                        { en: "I didn't use sun cream, so I got burned.", ja: "私は日焼け止めクリームを使わなかったので，日焼けしてしまった。" },
+                        { en: "I like my new teacher but hate his jokes.", ja: "新任の先生は好きだけど，彼の言う冗談はごめんだ。" },
+                        { en: "You can pay in cash, or you can use a credit card.", ja: "現金で支払うことも，あるいはクレジットカードを使うこともできます。" },
+                        { en: "If you wait a few minutes, I'll give you a ride.", ja: "少し待ってくれれば，車に乗せて行ってあげますよ。" },
+                        { en: "He asked me if[whether] I had time to talk.", ja: "彼は私に話をする時間があるか尋ねてきた。" },
+                        { en: "I don't care if[whether] she dances with my boyfriend.", ja: "私は彼女が私のボーイフレンドとダンスをしても気にしません。" },
+                        { en: "Because I didn't practice, I didn't play well.", ja: "私は練習しなかったので，上手にプレーできなかった。" },
+                        { en: "Although[Though] he was injured, he kept on playing.", ja: "彼はケガをしていたが，プレーを続けた。" },
+                        { en: "When I opened the door, a cat ran out.", ja: "私がドアを開けたとき，猫が飛び出してきた。" },
+                    ]
+                }
+            ]
+        }
+    };
+
+    /**
+     * 指定されたIDのページを表示し、他のページを非表示にする関数
+     * @param {string} pageId - 表示するページのID
+     */
+    function showPage(pageId) {
+      document.querySelectorAll('.page-container').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+      
+      // ページ遷移時に認識結果、スコア、フィードバックをリセット
+      if (pageId === 'freeReadingPage') {
+        document.getElementById("recognizedText").textContent = "ここに認識結果が表示されます";
+        updateScoreGauges([0, 0, 0, 0], false); // ゲージをリセット
+        document.getElementById("conciseAdvice").textContent = "ここに簡潔なアドバイスが表示されます";
+        document.getElementById("geminiResult").textContent = "ここにGeminiからの詳細なフィードバックが表示されます";
+        document.getElementById("diffOutput").innerHTML = "ここに一致・不一致が表示されます";
+      } else if (pageId === 'factbookPage') {
+        // FACTBOOKページに遷移したら、章ボタンを生成し、デフォルトで最初の章を表示
+        generateFactbookChapterButtons();
+        const firstChapterId = Object.keys(factbookContentData)[0];
+        if (firstChapterId) {
+            showFactbookChapter(firstChapterId);
+        }
+      }
+    }
+
+    // アプリロード時にホームページを表示
+    document.addEventListener('DOMContentLoaded', () => {
+      showPage('homepage');
+    });
+
+    /**
+     * メッセージボックスを表示する関数
+     * @param {string} message - 表示するメッセージ
+     * @param {string} type - メッセージの種類 ('error', 'success', 'info')
+     */
+    function showMessageBox(message, type = 'error') {
+      const messageBox = document.getElementById('messageBox');
+      const messageText = document.getElementById('messageText');
+      messageText.textContent = message;
+
+      // クラスをリセット
+      messageBox.className = 'fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 text-white';
+
+      if (type === 'error') {
+        messageBox.classList.add('bg-red-600');
+      } else if (type === 'success') {
+        messageBox.classList.add('bg-green-600');
+      } else { // default to info
+        messageBox.classList.add('bg-blue-600');
+      }
+
+      messageBox.classList.remove('hidden');
+      setTimeout(() => {
+        messageBox.classList.add('hidden');
+      }, 5000); // 5秒後に非表示にする
+    }
+
+    /**
+     * 課題文を設定する関数
+     */
+    function setChallengeText() {
+      const newText = document.getElementById("challengeTextInput").value.trim();
+      if (newText) {
+        original = newText; // グローバル変数 original を更新
+        document.getElementById("originalTextDisplay").textContent = original;
+        showMessageBox("課題文が設定されました。", 'success');
+      } else {
+        showMessageBox("課題文を入力してください。", 'error');
+      }
+    }
+
+    /**
+     * 録音を開始する関数
+     */
+    function startRecording() {
+      // SpeechRecognition APIの初期化
+      recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
+      recognition.lang = "en-US"; // 英語を設定
+      recognition.continuous = false; // 連続認識を無効化
+      recognition.interimResults = false; // 中間結果を無効化
+
+      // 音声認識結果が利用可能になったときのイベントハンドラ
+      recognition.onresult = function (event) {
+        spoken = event.results[0][0].transcript; // 認識されたテキストを取得
+        document.getElementById("recognizedText").textContent = spoken; // 認識結果を表示
+      };
+
+      recognition.onerror = function(event) {
+        console.error("SpeechRecognition error:", event.error);
+        showMessageBox(`音声認識エラー: ${event.error}。マイクの許可を確認してください。`, 'error');
+        document.getElementById("recognizedText").textContent = "音声認識エラーが発生しました。";
+      };
+
+      // 録音開始
+      recognition.start();
+      document.getElementById("recognizedText").textContent = "録音中...";
+      // ゲージの初期化とローディング表示
+      updateScoreGauges([0, 0, 0, 0], true); // スコアを0にリセットし、ローディング状態にする
+      document.getElementById("conciseAdvice").textContent = "採点中...";
+      document.getElementById("geminiResult").textContent = "採点中...";
+      document.getElementById("diffOutput").innerHTML = "録音中...";
+    }
+
+    /**
+     * 録音を停止し、Gemini APIで採点を行う関数
+     */
+    async function stopRecording() {
+      if (recognition) {
+        recognition.stop(); // 録音停止
+      }
+
+      // 採点結果表示エリアにローディングメッセージを表示
+      updateScoreGauges([0, 0, 0, 0], true); // スコアを0にリセットし、ローディング状態にする
+      document.getElementById("conciseAdvice").textContent = "採点中...";
+      document.getElementById("geminiResult").textContent = "採点中...";
+      document.getElementById("diffOutput").innerHTML = "比較中...";
+
+      // Gemini APIのAPIキーはCanvas環境が自動的に注入するため、空文字列でOK
+      const apiKey = ""; 
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+      // Geminiへのプロンプト
+      const prompt = `
+あなたは優しい英語の発音教師です。以下の内容を評価してください。
+
+【正解文】
+${original}
+
+【話された内容】
+${spoken}
+
+以下の４つの観点で、0〜5点で採点してください：
+
+1. Pronunciation（発音）:
+2. Fluency（流暢さ）:
+3. Rhythm（リズム）:
+4. Word Accuracy（単語の正確さ）:
+
+採点後、以下のJSON形式で結果を返してください。
+- "pronunciation": 発音の点数 (0-5)
+- "fluency": 流暢さの点数 (0-5)
+- "rhythm": リズムの点数 (0-5)
+- "wordAccuracy": 単語の正確さの点数 (0-5)
+- "conciseFeedbackEn": 簡潔な英語のアドバイス（1文程度）
+- "conciseFeedbackJa": 簡潔な日本語のアドバイス（1文程度）
+- "detailedFeedback": 詳細な英語と日本語のフィードバック（例：「Your rhythm was a little off.（リズムが少しずれていました）」のように）
+`;
+
+      try {
+        const payload = {
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: {
+              responseMimeType: "application/json",
+              responseSchema: {
+                  type: "OBJECT",
+                  properties: {
+                      "pronunciation": { "type": "NUMBER" },
+                      "fluency": { "type": "NUMBER" },
+                      "rhythm": { "type": "NUMBER" },
+                      "wordAccuracy": { "type": "NUMBER" },
+                      "conciseFeedbackEn": { "type": "STRING" },
+                      "conciseFeedbackJa": { "type": "STRING" },
+                      "detailedFeedback": { "type": "STRING" }
+                  },
+                  required: ["pronunciation", "fluency", "rhythm", "wordAccuracy", "conciseFeedbackEn", "conciseFeedbackJa", "detailedFeedback"]
+              }
+          }
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        // HTTPステータスが200番台以外の場合のエラーハンドリング
+        if (!response.ok) {
+          const errorBody = await response.text(); // エラーレスポンスの本文を取得
+          console.error(`Gemini API HTTP error! Status: ${response.status}, Body:`, errorBody); // ここで詳細なエラーボディをログに出力
+          let errorMessage = `API呼び出しに失敗しました。ステータスコード: ${response.status}。`;
+          try {
+              const errorJson = JSON.parse(errorBody);
+              if (errorJson.error && errorJson.error.message) {
+                  errorMessage += `エラー詳細: ${errorJson.error.message}`;
+              }
+          } catch (e) {
+              errorMessage += `詳細をブラウザのコンソールで確認してください。`;
+          }
+          document.getElementById("geminiResult").textContent = errorMessage;
+          showMessageBox(errorMessage, 'error');
+          updateScoreGauges([0, 0, 0, 0]); // エラー時はゲージをリセット
+          return; // 処理を中断
+        }
+
+        const result = await response.json();
+
+        // Gemini APIからの応答をチェック
+        if (result.candidates && result.candidates.length > 0 &&
+            result.candidates[0].content && result.candidates[0].content.parts &&
+            result.candidates[0].content.parts.length > 0) {
+          const jsonResponseText = result.candidates[0].content.parts[0].text;
+          let parsedResult;
+          try {
+            parsedResult = JSON.parse(jsonResponseText);
+            // JSON解析後、必須プロパティが存在するか確認
+            const requiredProps = ["pronunciation", "fluency", "rhythm", "wordAccuracy", "conciseFeedbackEn", "conciseFeedbackJa", "detailedFeedback"];
+            const missingProps = requiredProps.filter(prop => parsedResult[prop] === undefined || parsedResult[prop] === null);
+            if (missingProps.length > 0) {
+                console.warn("Gemini JSON response is missing required properties:", missingProps, parsedResult);
+                // 欠落しているプロパティがある場合はデフォルト値を設定
+                requiredProps.forEach(prop => {
+                    if (parsedResult[prop] === undefined || parsedResult[prop] === null) {
+                        parsedResult[prop] = (typeof parsedResult[prop] === 'number') ? 0 : "";
+                    }
+                });
+            }
+
+          } catch (parseError) {
+            console.error("Failed to parse Gemini JSON response:", parseError, jsonResponseText);
+            const errorMessage = "Geminiからの応答の解析に失敗しました。応答がJSON形式ではありません。";
+            document.getElementById("geminiResult").textContent = errorMessage;
+            showMessageBox(errorMessage, 'error');
+            updateScoreGauges([0, 0, 0, 0]); // エラー時はゲージをリセット
+            return;
+          }
+
+          // スコアの表示
+          const scores = [
+            parsedResult.pronunciation || 0,
+            parsedResult.fluency || 0,
+            parsedResult.rhythm || 0,
+            parsedResult.wordAccuracy || 0
+          ];
+          
+          updateScoreGauges(scores); // ゲージを更新
+
+          // 簡潔なアドバイスの表示
+          document.getElementById("conciseAdvice").textContent = parsedResult.conciseFeedbackJa || parsedResult.conciseFeedbackEn || "アドバイスがありません。";
+
+          // 詳細なフィードバックの表示
+          document.getElementById("geminiResult").textContent = parsedResult.detailedFeedback || "詳細なフィードバックがありません。";
+
+          showDiff(original, spoken);          // 色分け表示
+
+          // スコアを保存
+          scoreHistory.push({
+            date: new Date().toLocaleString(),
+            original: original,
+            spoken: spoken,
+            pronunciation: scores[0],
+            fluency: scores[1],
+            rhythm: scores[2],
+            wordAccuracy: scores[3],
+            conciseFeedbackEn: parsedResult.conciseFeedbackEn || "",
+            conciseFeedbackJa: parsedResult.conciseFeedbackJa || "",
+            detailedFeedback: parsedResult.detailedFeedback || ""
+          });
+        } else {
+          console.error("Gemini API response incomplete or malformed:", result);
+          const errorMessage = "Geminiからの応答が不完全または不正な形式です。少し時間を空けて再実行してください。";
+          document.getElementById("geminiResult").textContent = errorMessage;
+          showMessageBox(errorMessage, 'error');
+          updateScoreGauges([0, 0, 0, 0]); // エラー時はゲージをリセット
+        }
+      } catch (err) {
+        console.error("Gemini fetch error:", err);
+        // より具体的なエラーメッセージをユーザーに表示
+        let errorMessage = "API呼び出しに失敗しました。";
+        if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
+          errorMessage += "ネットワーク接続を確認してください。またはCORS/セキュリティポリシーによってブロックされている可能性があります。";
+        } else {
+          errorMessage += "予期せぬエラーが発生しました。ブラウザのコンソールで詳細を確認してください。";
+        }
+        document.getElementById("geminiResult").textContent = errorMessage;
+        showMessageBox(errorMessage, 'error');
+        updateScoreGauges([0, 0, 0, 0]); // エラー時はゲージをリセット
+      }
+    }
+
+    /**
+     * 元のテキストと話されたテキストの差分を色分けして表示する関数
+     * @param {string} original - 元のテキスト
+     * @param {string} spoken - 話されたテキスト
+     */
+    function showDiff(original, spoken) {
+      const origWords = original.trim().split(/\s+/);
+      const spokenWords = spoken.trim().split(/\s+/);
+      let result = '';
+
+      const maxLength = Math.max(origWords.length, spokenWords.length);
+      for (let i = 0; i < maxLength; i++) {
+        const orig = origWords[i] || '';
+        const said = spokenWords[i] || '';
+
+        if (orig.toLowerCase() === said.toLowerCase()) { // 大文字小文字を無視して比較
+          result += `<span class="bg-green-100 text-green-800 px-1 py-0.5 rounded-md mr-1">${said}</span>`;
+        } else {
+          result += `<span class="bg-red-100 text-red-800 px-1 py-0.5 rounded-md mr-1">${said || '[空白]'}</span>`;
+        }
+      }
+      document.getElementById("diffOutput").innerHTML = result;
+    }
+
+    /**
+     * スコア配列を受け取り、ゲージを更新する関数
+     * @param {number[]} scores - スコアの配列 [pronunciation, fluency, rhythm, wordAccuracy]
+     * @param {boolean} isLoading - ローディング状態かどうか (trueの場合、ゲージをリセット)
+     */
+    function updateScoreGauges(scores, isLoading = false) {
+        const labels = ["pronunciation", "fluency", "rhythm", "wordAccuracy"];
+        labels.forEach((label, index) => {
+            const score = scores[index];
+            const gaugeBar = document.getElementById(`gauge-${label}`);
+            const scoreText = document.getElementById(`score-${label}`);
+
+            if (gaugeBar && scoreText) {
+                if (isLoading) {
+                    gaugeBar.style.width = `0%`;
+                    scoreText.textContent = `採点中...`;
+                } else {
+                    const percentage = (score / 5) * 100;
+                    gaugeBar.style.width = `${percentage}%`;
+                    scoreText.textContent = `${score}/5`;
+                }
+            }
+        });
+    }
+
+    /**
+     * FACTBOOK内の章ボタンを動的に生成する関数
+     */
+    function generateFactbookChapterButtons() {
+        const chapterSelectionDiv = document.getElementById('factbookChapterSelection');
+        chapterSelectionDiv.innerHTML = ''; // 既存のボタンをクリア
+
+        for (const chapterId in factbookContentData) {
+            const chapter = factbookContentData[chapterId];
+            const button = document.createElement('button');
+            button.className = "bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-colors duration-300 ease-in-out text-lg";
+            button.textContent = chapter.title;
+            button.onclick = () => showFactbookChapter(chapterId);
+            chapterSelectionDiv.appendChild(button);
+        }
+    }
+
+    /**
+     * FACTBOOK内の特定の章コンテンツを表示し、他の章を非表示にする関数
+     * @param {string} chapterId - 表示する章のID
+     */
+    function showFactbookChapter(chapterId) {
+      const factbookContentDiv = document.getElementById('factbookContent');
+      factbookContentDiv.innerHTML = ''; // 既存のコンテンツをクリア
+
+      const chapterData = factbookContentData[chapterId];
+      if (!chapterData) {
+          factbookContentDiv.innerHTML = '<p class="text-red-500">章が見つかりません。</p>';
+          return;
+      }
+
+      // 章のタイトルを追加
+      const chapterTitle = document.createElement('h2');
+      chapterTitle.className = "text-2xl font-semibold mb-4";
+      chapterTitle.textContent = chapterData.title;
+      factbookContentDiv.appendChild(chapterTitle);
+
+      // 各セクションと英文を追加
+      chapterData.sections.forEach(section => {
+          if (section.title) { // titleが存在する場合のみh3を追加
+              const sectionTitle = document.createElement('h3');
+              sectionTitle.className = "text-xl font-medium mb-2 mt-4";
+              sectionTitle.textContent = section.title;
+              factbookContentDiv.appendChild(sectionTitle);
+          }
+          section.sentences.forEach(sentence => {
+              const p = document.createElement('p');
+              p.className = "mb-3 factbook-sentence"; // クリック可能にするためのクラス
+              p.innerHTML = `<span class="text-gray-700">${sentence.en}</span> <span class="text-gray-500 text-sm">（${sentence.ja}）</span>`;
+              p.onclick = () => {
+                  original = sentence.en; // 課題文として設定
+                  document.getElementById("originalTextDisplay").textContent = original;
+                  showPage('freeReadingPage'); // 音読採点ページへ移動
+                  showMessageBox("FACTBOOKから課題文が設定されました。", 'success');
+              };
+              factbookContentDiv.appendChild(p);
+          });
+      });
+
+      // アクティブな章コンテンツを強調する（もしあれば）
+      document.querySelectorAll('.factbook-chapter-content').forEach(chapter => {
+        chapter.classList.remove('active');
+      });
+      // この実装では、factbookContentDiv自体が動的に内容を入れ替えるため、
+      // 個別のfactbook-chapter-content divは不要になり、activeクラスも直接は使わない。
+      // もし、章ごとにHTML要素を分けて管理したい場合は、この部分を調整する必要がある。
+    }
+
+    /**
+     * 採点履歴をCSVファイルとしてダウンロードする関数
+     */
+    function downloadCSV() {
+      if (scoreHistory.length === 0) {
+        // データがない場合はメッセージボックスを表示
+        showMessageBox("まだデータがありません。録音して採点してください。", 'info');
+        return;
+      }
+
+      // CSVヘッダー
+      let csv = "Date,Original,Spoken,Pronunciation,Fluency,Rhythm,WordAccuracy,ConciseFeedbackEn,ConciseFeedbackJa,DetailedFeedback\n";
+
+      // 各採点履歴エントリをCSV形式に変換
+      scoreHistory.forEach(entry => {
+        csv += [
+          entry.date,
+          `"${entry.original.replace(/"/g, '""')}"`, // ダブルクォーテーションをエスケープ
+          `"${entry.spoken.replace(/"/g, '""')}"`,
+          entry.pronunciation,
+          entry.fluency,
+          entry.rhythm,
+          entry.wordAccuracy,
+          `"${entry.conciseFeedbackEn.replace(/"/g, '""')}"`,
+          `"${entry.conciseFeedbackJa.replace(/"/g, '""')}"`,
+          `"${entry.detailedFeedback.replace(/"/g, '""')}"`
+        ].join(",") + "\n";
+      });
+
+      // Blobオブジェクトを作成し、ダウンロードリンクを生成
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "reading_scores.csv"; // ダウンロードファイル名
+      document.body.appendChild(a); // DOMに追加（一部ブラウザで必要）
+      a.click(); // クリックしてダウンロードを開始
+      document.body.removeChild(a); // DOMから削除
+      URL.revokeObjectURL(url); // オブジェクトURLを解放
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語学習アプリ</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Interフォントを適用 */
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+  /* Chart.jsのツールチップのフォントをInterに設定 */
+  .chartjs-tooltip {
+    font-family: "Inter", sans-serif !important;
+  }
+  /* 全てのページコンテナを非表示にするための基本スタイル */
+  .page-container {
+    display: none;
+  }
+  /* アクティブなページのみ表示 */
+  .page-container.active {
+    display: block;
+  }
+  /* FACTBOOKの章コンテンツを非表示にするための基本スタイル */
+  .factbook-chapter-content {
+    display: none;
+  }
+  /* アクティブな章コンテンツのみ表示 */
+  .factbook-chapter-content.active {
+    display: block;
+  }
+  /* FACTBOOKの英文をホバー可能にするスタイル */
+  .factbook-sentence {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+  }
+  .factbook-sentence:hover {
+    background-color: #f0f4f8; /* Tailwind's gray-100 equivalent */
+  }
+</style>
+</head>
+<body class="p-4 md:p-10 bg-gray-50 text-gray-900 leading-relaxed">
+
+  <!-- Message Box for user feedback -->
+  <div id="messageBox" class="fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg hidden z-50 text-white">
+    <p id="messageText"></p>
+  </div>
+
+  <!-- ホームページ -->
+  <div id="homepage" class="page-container active">
+    <h1 class="text-3xl md:text-4xl font-semibold mb-8 text-center">SBC Pronounce Pro</h1>
+    <div class="flex flex-col items-center gap-6">
+      <button onclick="showPage('freeReadingPage')" class="w-full max-w-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg transition-colors duration-300 ease-in-out text-xl">
+        自由音読採点
+      </button>
+      <button onclick="showPage('factbookPage')" class="w-full max-w-xs bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg transition-colors duration-300 ease-in-out text-xl">
+        FACTBOOK
+      </button>
+    </div>
+  </div>
+
+  <!-- 自由音読採点ページ -->
+  <div id="freeReadingPage" class="page-container">
+    <button onclick="showPage('homepage')" class="mb-6 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out">
+      ← ホームに戻る
+    </button>
+    <h1 class="text-3xl md:text-4xl font-semibold mb-6">SBC Pronounce Pro</h1>
+
+    <h3 class="text-xl md:text-2xl font-medium mb-2">音読課題</h3>
+    <!-- 音読課題の入力エリアと設定ボタン -->
+    <textarea id="challengeTextInput" class="w-full p-3 md:p-4 bg-white rounded-lg shadow-sm text-lg md:text-xl mb-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="ここに音読課題のテキストを入力してください。">採点したい文をここに入力</textarea>
+    <button onclick="setChallengeText()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-colors duration-300 ease-in-out mb-6">
+      課題文を設定
+    </button>
     <p id="originalTextDisplay" class="p-3 md:p-4 bg-white rounded-lg shadow-sm text-lg md:text-xl mb-6"></p>
 
     <div class="flex flex-wrap gap-3 mb-8">
